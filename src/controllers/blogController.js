@@ -3,7 +3,6 @@ const blogModel = require("../models/blogModel")
 const mongoose = require('mongoose');
 
 
-
 const createBlog = async (req, res) => {
     try {
         let Blog = req.body
@@ -54,8 +53,6 @@ const getBlogsData = async (req, res) => {
         res.status(500).send({ msg: error.message })
     }
 }
-
-
 
 
 
@@ -115,6 +112,7 @@ const deleteBlog = async (req, res) => {
         res.status(500).send({ msg: error.message })
     }
 }
+
 
 const deleteBlogQuery = async (req, res) => {
     try {
