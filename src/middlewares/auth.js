@@ -5,7 +5,7 @@ const authenticate= function ( req, res, next) {
     try{
        let token = req.headers["x-api-key"];        
   if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
-   let decodedToken = jwt.verify(token, "Excellence Over Success");
+   let decodedToken = jwt.verify(token, "Secret-Key");
    
   if (!decodedToken) return res.status(401).send({ status: false, msg: "token is invalid" });
   
@@ -23,7 +23,7 @@ const authenticate= function ( req, res, next) {
       let token = req.headers["x-api-key"];
       
   if (!token) return res.status(400).send({ status: false, msg: "token must be present" });
-  let decodedToken = jwt.verify(token, "Excellence Over Success");
+  let decodedToken = jwt.verify(token, "Secret-Key");
   let userTobeModified =req.query.authorId
   let userLoggedIn = decodedToken.authorId
   
