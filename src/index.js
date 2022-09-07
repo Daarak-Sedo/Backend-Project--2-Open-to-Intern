@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect("mongodb+srv://akash2database:JS70XrperNPPQRwv@cluster0.lz7q3.mongodb.net/akash-database2", {
+mongoose.connect("mongodb+srv://Bhuwan:fake2fake@cluster0.rwdjkar.mongodb.net/Blog?retryWrites=true&w=majority", {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))

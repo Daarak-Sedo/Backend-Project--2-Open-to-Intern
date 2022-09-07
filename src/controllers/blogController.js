@@ -24,14 +24,17 @@ const createBlog = async (req, res) => {
 }
 
 
-
 const getBlogsData = async (req, res) => {
     try {
 
         let input = req.query.authorId
+
         let isValid = mongoose.Types.ObjectId.isValid(input)
         if (!isValid) return res.status(400).send({ msg: "enter valid objectID" })
+
         let categorySelected = req.query.category
+        if(!categorySelected ) return res.status(400).send({msg:"category not avalible"})
+
         if (input) {
 
             let blogs = await blogModel.find({ authorId: input, category: categorySelected, isDeleted: false }).populate("authorId") //ispublished =true not given because it not makes sense
@@ -114,34 +117,23 @@ const deleteBlog = async (req, res) => {
 }
 
 
-const deleteBlogQuery = async (req, res) => {
+
+const  deleteBlogQuery = async (req, res) => {
     try {
-        let authorId = req.query.authorId
+        const queryParams = req.query;
+        if (Object.keys(queryParams).length == 0)
+            return res.status(400).send({ status: false, msg: "Please enter some data in the body" });
 
-        let isValid = mongoose.Types.ObjectId.isValid(authorId)
-        if (!isValid) return res.status(400).send({ msg: "enter valid objectID" })
-        let input = req.query
-        let category = req.query.category
-        let tags = req.query.tags
-        let subCategory = req.query.subCategory
-        let isPublished = req.query.boolean
-        let date = Date.now()
+        const blog = await blogModel.find({ $and: [queryParams, { isDeleted: false }, { isPublished: true }] });
 
-        if (Object.keys(input).length == 0) {
-            return res.status(400).send({ status: false, msg: "Invalid request Please provide valid blog details in Query" });
-        }
-
-        let alert = await blogModel.find({  authorId: authorId, isDeleted: true })
-        if (alert) return res.status(409).send({ msg: "Sorry ,all blogs of the selected author were already deleted" })
-
-        let blogs = await blogModel.updateMany({ category: category, authorId: authorId, tags: tags, subcategory: subCategory, isPublished: isPublished },
-            { $set: { isDeleted: true, deletedAt: date } }, { new: true })
-
-        if (!blogs) return res.status(404).send({ msg: "no data found" })
-        res.status(200).send({ status: true, msg: blogs })
+        if (blog.isDeleted == true || blog.length == 0)
+            return res.status(404).send({msg: "Document is already Deleted "})
+        
+        const updatedBlog = await blogModel.updateMany(queryParams, { $set: { isDeleted: true, isPublished: false } }, { new: true });
+        return res.status(200).send({ status: true, data: updatedBlog })
     }
-    catch (error) {
-        res.status(500).send({ msg: error.message })
+    catch (err) {
+         res.status(500).send({ error: err.message })
     }
 }
 
