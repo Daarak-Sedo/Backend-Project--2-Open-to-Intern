@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 
 const createBlog = async (req, res) => {
     try {
+        //<-------Checking Whether Request Body is empty or not----------->//
         let Blog = req.body
         if (Object.keys(Blog).length == 0) {
-            return res.status(400).send({ status: false, msg: "Invalid request Please provide valid Author  details" });
-        }
+            return res.status(400).send({ status: false, msg: "Invalid request Please provide valid Author  details" }); }
+     
+    //<-------Validation of Blog Body----------->// 
         if (!Blog.title) return res.status(400).send({ msg: " title is required " })
         if (!Blog.body) return res.status(400).send({ msg: "body is required " })
         if (!Blog.authorId) return res.status(400).send({ msg: " authorId is required " })
@@ -24,9 +26,10 @@ const createBlog = async (req, res) => {
 }
 
 
+//<---------------This function used for Fetching a Blog--------------->//
 const getBlogsData = async (req, res) => {
     try {
-
+    //<------Acquiring UserId from Decoded Token------->//
         let input = req.query.authorId
 
         let isValid = mongoose.Types.ObjectId.isValid(input)
@@ -139,8 +142,10 @@ const  deleteBlogQuery = async (req, res) => {
 
 
 
-module.exports.createBlog = createBlog
-module.exports.getBlogsData = getBlogsData
-module.exports.updateBlog = updateBlog
-module.exports.deleteBlog = deleteBlog
-module.exports.deleteBlogQuery = deleteBlogQuery
+// module.exports.createBlog = createBlog
+// module.exports.getBlogsData = getBlogsData
+// module.exports.updateBlog = updateBlog
+// module.exports.deleteBlog = deleteBlog
+// module.exports.deleteBlogQuery = deleteBlogQuery
+
+module.exports = {createBlog,getBlogsData,updateBlog,deleteBlog,deleteBlogQuery}

@@ -5,7 +5,6 @@ const blogSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        
     },
     body: {
         type: String,
@@ -16,7 +15,9 @@ const blogSchema = new mongoose.Schema({
         type: ObjectId,
         ref: "Author",
         required: true,
-        trim: true
+        trim: true,
+        unique: true,
+        
     },
     tags: {
         type: [String],
