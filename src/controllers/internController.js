@@ -29,8 +29,8 @@ const createInterns = async function (req, res) {
      
         // cfind is college id is exist in our collection OR not
         const isMatch= await CollegeModel.findOne({name:collegeName})  
-     if(!isMatch){return res.status(400).send({status:false, message:"no such college found "})}
-         //-----------validation ends-----------
+     if(!isMatch){return res.status(400).send({status:false, message:"No such college found "})}      //-----------validation ends-----------
+        
 
       data.collegeId = isMatch._id.toString()  //puttting collageId into data(frontend data) from Backend , ab 1 extra input frontend se Milega
       
@@ -41,7 +41,6 @@ const createInterns = async function (req, res) {
             mobile:newIntern.mobile,
             collegeId :newIntern.collegeId,
             isDeleted:newIntern.isDeleted
-
         }
         return res.status(201).send({ status: true, message: obj })
     }
