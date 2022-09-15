@@ -4,20 +4,25 @@ const collegeSchema = new mongoose.Schema({
     name: {
         type: String,
         unique: true,
-        required: 'Name is required',
-        lowercase: true
+        required:true,
+        lowercase: true,    // it will convert in lowercase automatically
+        trim:true
     },
     fullName: {
         type: String,
-        required: 'Full name is required'
+        required: true,
+        trim:true
     },
     logoLink: {
         type: String,
-        required: 'Logo is required'
+        required: true,
+        trim:true
+
     },
     isDeleted: {
         type: Boolean,
-        default: false
+        default: false,
+        trim:true
     }
 }, { timestamps: true });
 

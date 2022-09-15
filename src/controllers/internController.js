@@ -6,38 +6,48 @@ const {isValid,isRightFormatemail,isRightFormatmobile}=require("../validation/va
 const createInterns = async function (req, res) {
     try {
         let data = req.body
-        const { name, email, mobile, collegeId } = data;
-        //validations 
-        if (Object.keys(data) == 0) return res.status(400).send({ status: false, msg: "NO data provided" })
+        const { name, email, mobile, collegeName} = data; // getting data  from body 
 
-        if (!isValid(name)) { return res.status(400).send({ status: false, msg: "Name is required" }) }
+        //------------validations start------------ 
+        if (Object.keys(data) == 0) return res.status(400).send({ status: false, message: "NO data provided" })    // check data is exist | key exist in data
 
-        if (!isValid(email)) { return res.status(400).send({ status: false, msg: "Email is required" }) }
+        if (!isValid(name)) { return res.status(400).send({ status: false, message: "Name is required" }) }   // to check keys value 
 
-        if (!isRightFormatemail(email)) { return res.status(400).send({ status: false, msg: "Please enter a valid email address" }) }
+        if (!isValid(email)) { return res.status(400).send({ status: false, message: "Email is required" }) }
 
-        let duplicateEmail= await InternModel.findOne({email:email})
-        if(duplicateEmail){ return res.status(400).send({status: false, msg: "Email already exist"})}
+        if (!isRightFormatemail(email)) { return res.status(400).send({ status: false, message: "Please enter a valid email address" }) }
 
-        if (!isValid(mobile)) { return res.status(400).send({ status: false, msg: "Mobile is required" }) }
+        let duplicateEmail= await InternModel.findOne({email:email})  //to uniq email id
+        if(duplicateEmail){ return res.status(400).send({status: false, message: "Email already exist"})}   // check if email address is exist in our collection OR not 
 
-        if (!isRightFormatmobile(mobile)) { return res.status(400).send({ status: false, msg: "Please enter a valid mobile number" }) }
+        if (!isValid(mobile)) { return res.status(400).send({ status: false, message: "Mobile is required" }) }
+
+        if (!isRightFormatmobile(mobile)) { return res.status(400).send({ status: false, message: "Please enter a valid mobile number" }) }
 
         let duplicateMobile= await InternModel.findOne({mobile:mobile})
-        if(duplicateMobile){ return res.status(400).send({status: false, msg: "Mobile number already exist"})}
-    
-        const isMatch= await CollegeModel.findById(collegeId)
-        if(!isMatch){return res.status(400).send({status:false, msg:"please enter a valid college id"})}
+        if(duplicateMobile){ return res.status(400).send({status: false, message: "Mobile number already exist"})}
+     
+        // cfind is college id is exist in our collection OR not
+        const isMatch= await CollegeModel.findOne({name:collegeName})  
+     if(!isMatch){return res.status(400).send({status:false, message:"no such college found "})}
+         //-----------validation ends-----------
 
-        //validation ends
-
-
+      data.collegeId = isMatch._id.toString()  //puttting collageId into data(frontend data) from Backend , ab 1 extra input frontend se Milega
+      
         const newIntern = await InternModel.create(data);
-        return res.status(201).send({ status: true, msg: newIntern })
+        let obj={
+            name:collegeName,
+            email:newIntern.email,
+            mobile:newIntern.mobile,
+            collegeId :newIntern.collegeId,
+            isDeleted:newIntern.isDeleted
+
+        }
+        return res.status(201).send({ status: true, message: obj })
     }
     catch (error) {
         console.log(error)
-        return res.status(500).send({ msg: error.message })
+        return res.status(500).send({ message: error.message })
     }
 
 }
