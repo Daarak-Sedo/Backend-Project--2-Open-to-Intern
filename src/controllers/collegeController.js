@@ -3,12 +3,12 @@ const InternModel = require("../models/internModel");
 const { isValid } = require("../validation/validation")
 
 
-const createCollege = async function (req, res) {
+const createCollege= async function (req, res) {
     try {
         let data = req.body;
         const { name, fullName, logoLink } = data;
 
-        if (Object.keys(data) == 0) return res.status(400).send({ status: false, message: "NO data provided" })   // if user gives no deatils/no blanck obj , 
+        if (Object.keys(data).length == 0) return res.status(400).send({ status: false, message: "NO data provided" })   // if user gives no deatils/no blanck obj , 
 
         if (!isValid(name)) { return res.status(400).send({ status: false, message: "Name is required" }) }
         let duplicateName = await CollegeModel.findOne({ name: name })
@@ -49,7 +49,7 @@ const getColleges = async function (req, res) {
         } else { var x = interns }
 
         let result = await CollegeModel.find({ name: cName }).select({ name: 1, fullName: 1, logoLink: 1, _id: 0 })    //_id:0  will not select logoLink   _id:1 will be selected
-
+       //console.log(result)
 
         const internDeatils = {     //we have to send res like obj that`s why we are using this
             name: cName,

@@ -9,7 +9,7 @@ const createInterns = async function (req, res) {
         const { name, email, mobile, collegeName} = data; // getting data  from body 
 
         //------------validations start------------ 
-        if (Object.keys(data) == 0) return res.status(400).send({ status: false, message: "NO data provided" })    // check data is exist | key exist in data
+        if (Object.keys(data).lenght == 0) return res.status(400).send({ status: false, message: "NO data provided" })    // check data is exist | key exist in data
 
         if (!isValid(name)) { return res.status(400).send({ status: false, message: "Name is required" }) }   // to check keys value 
 

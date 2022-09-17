@@ -4,7 +4,6 @@ const CollegeController= require("../controllers/collegeController");
 const InternController= require("../controllers/internController");
 
 
-
 router.post("/functionup/colleges",CollegeController.createCollege);
 
 router.post("/functionup/interns",InternController.createInterns);
